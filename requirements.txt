@@ -1,0 +1,8 @@
+numpy
+matplotlib
+torch
+hyperopt
+PyYAML
+scipy
+pandas
+scikit-learn
