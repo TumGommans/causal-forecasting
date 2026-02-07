@@ -1,0 +1,39 @@
+# Synthetic Data Generation Configuration
+
+# Data dimensions
+n_units: 10000
+n_time_periods: 50
+n_covariates: 10
+
+# Treatment configuration
+n_treatments: 3  # Number of non-control treatments (0=control, 1,2,3=treatments)
+treatment_probabilities: [0.4, 0.2, 0.2, 0.2]  # Target probabilities for [control, t1, t2, t3]
+# Note: Actual probabilities will vary due to covariate-dependent assignment (confounding)
+# Treatment assignment depends on X_0, X_1, X_2 via multinomial logit model
+
+# Outcome generation
+noise_std: 1.0
+base_outcome_range: [10, 50]  # Range for baseline outcome
+
+# Treatment effects (heterogeneous by covariates)
+treatment_effects:
+  # Effect of treatment 1 vs control
+  treatment_1:
+    base_effect: 5.0
+    heterogeneity_strength: 2.0  # How much effect varies by covariates
+    interaction_covariates: [0, 1, 2]  # Which covariates interact with treatment
+  
+  # Effect of treatment 2 vs control
+  treatment_2:
+    base_effect: 8.0
+    heterogeneity_strength: 3.0
+    interaction_covariates: [1, 2, 3]
+  
+  # Effect of treatment 3 vs control
+  treatment_3:
+    base_effect: 3.0
+    heterogeneity_strength: 1.5
+    interaction_covariates: [0, 3, 4]
+
+# Random seed
+random_state: 42

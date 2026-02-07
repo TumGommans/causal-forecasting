@@ -1,0 +1,171 @@
+# Retail Data Generation Configuration
+
+# Data dimensions
+data_structure:
+  n_countries: 2
+  n_stores_per_country: 20
+  n_skus_per_category: 30
+  n_time_periods: 52  # Weekly data for 1 year
+  
+  # Categories (6 total)
+  categories: ["jackets", "shirts", "pants", "dresses", "shoes", "accessories"]
+  
+  # Age groups (4 total)
+  age_groups: ["kids", "teens", "adults", "seniors"]
+  
+  # Gender (3 total - one-hot will have 2 dummy vars)
+  genders: ["male", "female", "unisex"]
+  
+  # Season (3 total)
+  seasons: ["FW", "SS", "none"]
+
+# Treatment (discount) configuration
+treatment:
+  discount_levels: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+  
+  # Exponential decline for base probabilities
+  decline_rate: 0.1  # Lower = gentler decline (better treatment balance)
+  
+  # Confounding variables (affect treatment assignment)
+  confounding:
+    price_effect: -0.1        # Higher price -> less likely to discount deeply
+    stock_effect: 0.1         # Higher stock -> more likely to discount
+    category_effects:         # Category-specific discount propensity
+      jackets: -0.1
+      shirts: 0.05
+      pants: 0.0
+      dresses: 0.05
+      shoes: -0.05
+      accessories: 0.1
+    season_effects:           # Seasonal patterns
+      FW: 0.1                 # Fall/Winter discounts in spring
+      SS: -0.05               # Spring/Summer holds price better
+      none: 0.0
+    sustainable_effect: -0.1  # Sustainable items discount less
+
+# Baseline price configuration (log-normal distribution)
+pricing:
+  # Mean and std on log scale for each category
+  category_price_params:
+    jackets:
+      log_mean: 4.5      # exp(4.5) ≈ 90 euros
+      log_std: 0.4
+    shirts:
+      log_mean: 3.5      # exp(3.5) ≈ 33 euros
+      log_std: 0.3
+    pants:
+      log_mean: 4.0      # exp(4.0) ≈ 55 euros
+      log_std: 0.35
+    dresses:
+      log_mean: 4.2      # exp(4.2) ≈ 67 euros
+      log_std: 0.38
+    shoes:
+      log_mean: 4.3      # exp(4.3) ≈ 74 euros
+      log_std: 0.42
+    accessories:
+      log_mean: 3.2      # exp(3.2) ≈ 25 euros
+      log_std: 0.5
+
+# Stock management
+stock:
+  # Initial stock (random uniform per category)
+  initial_stock_range:
+    jackets: [5, 20]
+    shirts: [10, 40]
+    pants: [8, 30]
+    dresses: [6, 25]
+    shoes: [5, 20]
+    accessories: [15, 50]
+  
+  # Replenishment policy (threshold-based)
+  replenishment_threshold: 0.2  # Replenish when stock < threshold * target
+  target_stock:
+    jackets: 15
+    shirts: 30
+    pants: 20
+    dresses: 18
+    shoes: 15
+    accessories: 35
+
+# Sales outcome generation
+sales_model:
+  # Zero-inflation parameters
+  zero_inflation:
+    # Randomly assign SKUs to three groups
+    high_zero_prob_pct: 0.10   # 10% of SKUs have p_zero ≈ 1
+    low_zero_prob_pct: 0.10    # 10% of SKUs have p_zero ≈ 0
+    # Remaining 80% have p_zero ∈ (0.05, 0.95)
+    
+    high_zero_mean: 0.95       # Mean p_zero for high group
+    high_zero_std: 0.03
+    low_zero_mean: 0.05        # Mean p_zero for low group
+    low_zero_std: 0.03
+    mid_zero_min: 0.05         # Min p_zero for middle group
+    mid_zero_max: 0.95         # Max p_zero for middle group
+  
+  # Negative binomial parameters for positive sales
+  negbin:
+    base_mean: 5.0            # Base expected sales (before covariates/treatment)
+    dispersion: 2.0           # Overdispersion parameter (lower = more dispersed)
+  
+  # Treatment effects (discount effects on sales)
+  treatment_effects:
+    base_discount_effect: 8.0           # Main effect: higher discount -> more sales
+    diminishing_returns_rate: 0.3       # Diminishing returns: effect of 0.8 < 8x effect of 0.1
+    
+    # Heterogeneous effects by covariates
+    heterogeneity:
+      price_interaction: -1.5           # High price items benefit more from discount
+      sustainable_interaction: 0.8      # Sustainable items have different response
+      category_interactions:
+        jackets: 1.2
+        shirts: 0.8
+        pants: 1.0
+        dresses: 1.1
+        shoes: 0.9
+        accessories: 0.7
+
+# Spatial interference (store × category × time)
+spatial_interference:
+  enabled: false
+  overall_strength: 5.0
+  
+  # Competitor effects (other SKUs in same store × category)
+  competitor_discount_effect: -2.0     # Higher competitor discount -> lower own sales
+  competitor_price_effect: 0.5         # Higher competitor price -> higher own sales
+  
+  # Heterogeneous spatial effects
+  heterogeneity_by_category:
+    jackets: 1.2      # More sensitive to competition
+    shirts: 1.0
+    pants: 0.9
+    dresses: 1.1
+    shoes: 0.8
+    accessories: 0.7  # Less sensitive
+  
+  aggregation_method: "mean"  # Options: mean, median, max, min, mode
+
+# Temporal interference (unit × store level)
+temporal_interference:
+  enabled: false
+  overall_strength: 5.0
+  
+  lookback_weeks: 6
+  
+  # Stockpiling effect (negative when BOTH past discount AND sales high)
+  past_discount_effect: -1.5
+  past_sales_effect: -1.0
+  stockpiling_threshold: 0.5   # Define "high" as > 70th percentile
+  
+  aggregation_method: "mean"   # Options: mean, median, max, min, mode
+
+# Covariate generation
+covariates:
+  # Probabilities for categorical variables
+  age_group_probs: [0.20, 0.25, 0.40, 0.15]  # kids, teens, adults, seniors
+  gender_probs: [0.40, 0.40, 0.20]           # male, female, unisex
+  season_probs: [0.35, 0.35, 0.30]           # FW, SS, none
+  sustainable_prob: 0.15                     # 15% of items are sustainable
+
+# Random seed
+random_state: 42

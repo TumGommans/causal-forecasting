@@ -1,0 +1,66 @@
+model_type: "hurdle_xlearner"
+
+# Existing X-learner config (keep for comparison)
+xlearner:
+  stage1:
+    n_estimators: 150
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_lambda: 1.0
+    reg_alpha: 0.1
+    objective: "reg:tweedie"  # OLD APPROACH
+
+  stage2:
+    n_estimators: 150
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_lambda: 1.0
+    reg_alpha: 0.1
+    objective: "reg:squarederror"
+
+# NEW: Hurdle X-learner config
+hurdle_xlearner:
+  # Stage 1a: Binary classification (P(Y > 0))
+  zero_stage:
+    n_estimators: 100
+    max_depth: 4
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_lambda: 1.0
+    reg_alpha: 0.1
+    objective: "binary:logistic"
+    eval_metric: "logloss"
+  
+  # Stage 1b: Positive outcomes (E[Y | Y > 0])
+  positive_stage:
+    n_estimators: 150
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_lambda: 1.0
+    reg_alpha: 0.1
+    objective: "count:poisson"  # Matches NegBin structure
+    # Alternative: "reg:squarederror" with log-transformed targets
+    eval_metric: "poisson-nloglik"
+  
+  # Stage 3: CATE models
+  effect_stage:
+    n_estimators: 100
+    max_depth: 4
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_lambda: 1.0
+    reg_alpha: 0.1
+    objective: "reg:squarederror"
+    eval_metric: "rmse"
+  
+  # Hurdle-specific settings
+  combine_method: "add"  # Options: add, multiply, separate
+  n_folds: 5

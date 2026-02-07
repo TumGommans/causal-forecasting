@@ -1,0 +1,34 @@
+# Evaluation Configuration
+
+# Metrics to compute
+metrics:
+  - rmse
+  - mae
+  - bias
+  - mse
+
+# Visualization settings
+visualization:
+  figure_size: [15, 10]
+  dpi: 300
+  style: "seaborn-v0_8-darkgrid"
+  
+  # Boxplot settings
+  boxplot:
+    showfliers: true
+    whis: 1.5
+    
+  # Calibration plot settings
+  calibration:
+    n_bins: 10
+    
+  # Color palette for treatments
+  colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"]
+
+# Output settings
+output:
+  save_dir: "/workspace/results"
+  results_filename: "evaluation_results.json"
+  figure_filename: "cate_error_distribution.png"
+  calibration_filename: "cate_calibration.png"
+  metrics_filename: "performance_metrics.png"

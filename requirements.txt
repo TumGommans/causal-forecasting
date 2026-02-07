@@ -6,3 +6,4 @@ PyYAML
 scipy
 pandas
 scikit-learn
+xgboost
