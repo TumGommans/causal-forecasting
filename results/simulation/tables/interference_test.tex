@@ -1,0 +1,34 @@
+\begin{table}[H]
+    \centering
+    \caption{Bias and RMSE values for the interference stress test. Formatted as mean (std).}
+    \label{tab:interference_test}
+    \begin{threeparttable}
+        \begin{tabular}{l l l c c c c}
+            \toprule
+            & & & \multicolumn{2}{c}{No interference} & \multicolumn{2}{c}{Interference} \\
+            \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+            Model & RA Formula & Objective\textsuperscript{*} & Bias & RMSE & Bias & RMSE \\
+            \midrule
+            \multirow{4}{*}{X-learner}
+                & \multirow{2}{*}{Acharki et al. (2023)}
+                                & MSE     & 0.262 (0.61) & 3.658 (0.78) & -0.553 (0.00) & 5.391 (0.00) \\
+                &               & Tweedie & -2.777 (0.72) & 4.233 (0.91) & -2.864 (0.00) & 5.066 (0.00) \\
+                & \multirow{2}{*}{Residual correction}
+                                & MSE     & 0.271 (0.61) & 3.572 (0.79) & -0.599 (0.00) & 5.117 (0.00) \\
+                &               & Tweedie & -1.173 (0.50) & 2.939 (0.63) & -1.473 (0.00) & 4.403 (0.00) \\
+            \midrule
+            \multirow{4}{*}{HyX-learner}
+                & \multirow{2}{*}{Acharki et al. (2023)}
+                                & MSE     & -1.108 (0.58) & 2.546 (0.66) & -0.779 (0.00) & 4.876 (0.00) \\
+                &               & Tweedie & -1.877 (0.57) & 3.068 (0.75) & -2.805 (0.00) & 4.664 (0.00) \\
+                & \multirow{2}{*}{Residual correction}
+                                & MSE     & -1.062 (0.57) & 2.046 (0.55) & -0.812 (0.00) & 5.003 (0.00) \\
+                &               & Tweedie & -1.001 (0.44) & 2.105 (0.50) & -1.413 (0.00) & 4.449 (0.00) \\
+            \bottomrule
+        \end{tabular}
+        \begin{tablenotes}
+            \small
+            \item[*] Applied to the first stage outcome models.
+        \end{tablenotes}
+    \end{threeparttable}
+\end{table}

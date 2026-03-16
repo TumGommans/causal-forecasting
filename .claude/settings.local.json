@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c:*)",
+      "Bash(find /workspace -name \"*.py\" -exec wc -l {} +)",
+      "Bash(python3 -:*)",
+      "Bash(python3 -c \":*)",
+      "Bash(head -20 /workspace/data/*.csv)",
+      "Bash(file /workspace/data/*.dta)",
+      "Bash(wc -l /workspace/data/*.csv /workspace/data/*.dta)",
+      "WebSearch",
+      "WebFetch(domain:journal.r-project.org)",
+      "WebFetch(domain:arxiv.org)",
+      "WebFetch(domain:search.r-project.org)",
+      "WebFetch(domain:imai.fas.harvard.edu)",
+      "WebFetch(domain:docs.doubleml.org)",
+      "WebFetch(domain:www.causalmlbook.com)",
+      "WebFetch(domain:economics.mit.edu)",
+      "WebFetch(domain:cran.r-project.org)",
+      "Bash(python3 -c \"import statsmodels; print\\(''statsmodels available:'', statsmodels.__version__\\)\")",
+      "Bash(pip install statsmodels -q)",
+      "Bash(python3 -c \"import statsmodels; print\\(''ok'', statsmodels.__version__\\)\")",
+      "Bash(python3:*)",
+      "Bash(wc -l /workspace/results/simulation/dgp/*.csv)",
+      "Bash(head -3 /workspace/results/simulation/dgp/*.csv)",
+      "Bash(file /workspace/results/simulation/performance/*.png /workspace/results/real-life/data/*.png /workspace/results/simulation/dgp/*.png)",
+      "Bash(ls -lh /workspace/results/simulation/performance/*.png /workspace/results/real-life/data/*.png /workspace/results/simulation/dgp/*.png)",
+      "Bash(find /workspace -type f -name *.py)",
+      "Bash(python main.py --help)",
+      "Bash(chmod +x /workspace/reproduce.sh)"
+    ]
+  }
+}

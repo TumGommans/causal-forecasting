@@ -1,0 +1,38 @@
+real_data:
+  data_dir: "./data/cookies"
+  test_size: 0.2
+  random_seed: 42
+  output_dir: "./results/real-life"
+
+  use_store_demographics: true
+
+  n_gates_groups: 5
+
+  # Sample 15% of valid rows per chunk (~13.4M raw rows in cookies file).
+  sample_frac: 0.15
+
+  # Delta grid for HyX-learner per-treatment CV.  Scale-independent (delta=1
+  # is the baseline hyperparameter-free formula).
+  delta_grid: [0.05, 0.10, 0.20, 0.50, 0.75, 1.00, 1.50, 2.00, 3.00, 5.00, 7.50, 10.0, 20.0, 50.0, 100.0]
+
+  # Learner variants. stage1_shrinkage=true enables the HyX-learner blend.
+  learner_configs:
+    x_learner:   {stage1_shrinkage: false, name: "X-learner"}
+    hyx_learner: {stage1_shrinkage: true,  name: "HyX-learner"}
+
+  # RA formula + first-stage objective grid.
+  ra_obj_configs:
+    - {key: acharki_mse,     objective: gaussian, subtract_resid: true,  ra_label: "Acharki et al. (2023)", obj_label: "MSE"}
+    - {key: acharki_tweedie, objective: tweedie,  subtract_resid: true,  ra_label: "Acharki et al. (2023)", obj_label: "Tweedie"}
+    - {key: ours_mse,        objective: gaussian, subtract_resid: false, ra_label: "Residual correction",   obj_label: "MSE"}
+    - {key: ours_tweedie,    objective: tweedie,  subtract_resid: false, ra_label: "Residual correction",   obj_label: "Tweedie"}
+
+model:
+  xgboost_params:
+    min_child_weight: 100
+    max_depth: 4
+    n_estimators: 200
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 1.0
+    n_jobs: -1

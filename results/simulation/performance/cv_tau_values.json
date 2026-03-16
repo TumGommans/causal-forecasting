@@ -1,0 +1,30 @@
+{
+    "dgp_a": {
+        "x_learner": {
+            "acharki_mse": null,
+            "acharki_tweedie": null,
+            "ours_mse": null,
+            "ours_tweedie": null
+        },
+        "hyx_learner": {
+            "acharki_mse": 4000.0,
+            "acharki_tweedie": 7000.0,
+            "ours_mse": 4000.0,
+            "ours_tweedie": 7000.0
+        }
+    },
+    "dgp_b": {
+        "x_learner": {
+            "acharki_mse": null,
+            "acharki_tweedie": null,
+            "ours_mse": null,
+            "ours_tweedie": null
+        },
+        "hyx_learner": {
+            "acharki_mse": 7000.0,
+            "acharki_tweedie": 7000.0,
+            "ours_mse": 7000.0,
+            "ours_tweedie": 7000.0
+        }
+    }
+}

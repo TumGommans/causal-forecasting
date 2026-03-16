@@ -1,0 +1,30 @@
+\begin{table}[h]
+\centering
+\\caption{Extreme groups test statistics: ($\hat{\gamma}_5(d_k) - \hat{\gamma}_1(d_k)$).}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllccc}
+\toprule
+Model & RA Formula & Objective\textsuperscript{*} & Bonus Buy & Price Reduction & Coupon \\
+\midrule
+            \multirow{4}{*}{X-learner}
+                & \multirow{2}{*}{Acharki et al. (2023)}
+                                & MSE     & -0.20 (0.55) & 43.95*** (3.71) & 138.95*** (9.86) \\
+                &               & Tweedie & -2.13 (0.51) & 47.60*** (2.34) & 112.33*** (14.63) \\
+                & \multirow{2}{*}{Residual correction}
+                                & MSE     & 2.00*** (0.50) & 39.19*** (3.76) & 138.63*** (9.81) \\
+                &               & Tweedie & 5.36*** (0.43) & 48.28*** (2.18) & 125.49*** (8.47) \\
+            \midrule
+            \multirow{4}{*}{HyX-learner}
+                & \multirow{2}{*}{Acharki et al. (2023)}
+                                & MSE     & 0.29 (0.53) & 43.30*** (3.76) & 131.99*** (14.12) \\
+                &               & Tweedie & -1.20 (0.49) & 46.87*** (2.32) & 124.80*** (8.50) \\
+                & \multirow{2}{*}{Residual correction}
+                                & MSE     & 1.67*** (0.48) & 39.93*** (3.76) & 132.86*** (9.54) \\
+                &               & Tweedie & 4.83*** (0.42) & 48.06*** (2.17) & 125.45*** (8.41) \\
+\bottomrule
+\multicolumn{6}{l}{{\footnotesize Heteroskedasticity-robust standard errors in parentheses.}} \\
+\multicolumn{6}{l}{{\footnotesize *** $p < 0.01$, ** $p < 0.05$.}} \\
+\multicolumn{6}{l}{{\footnotesize * Applied to the first stage outcome models.}}
+\end{tabular}%
+}
+\end{table}

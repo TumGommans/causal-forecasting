@@ -1,0 +1,32 @@
+\begin{table}[H]
+    \centering
+    \caption{RMSE values for every model and DGP combination. Formatted as mean (std).}
+    \label{tab:main_experiment}
+    \begin{threeparttable}
+        \begin{tabular}{l l l c c}
+            \toprule
+            Model & RA Formula & Objective\textsuperscript{*} & DGP A & DGP B \\
+            \midrule
+            \multirow{4}{*}{X-learner}
+                & \multirow{2}{*}{Acharki et al. (2023)}
+                                & MSE     & 3.809 (0.79) & 3.658 (0.78) \\
+                &               & Tweedie & 4.285 (0.98) & 4.233 (0.91) \\
+                & \multirow{2}{*}{Residual correction}
+                                & MSE     & 3.790 (0.86) & 3.572 (0.79) \\
+                &               & Tweedie & 3.178 (0.68) & 2.939 (0.63) \\
+            \midrule
+            \multirow{4}{*}{HyX-learner}
+                & \multirow{2}{*}{Acharki et al. (2023)}
+                                & MSE     & 1.970 (0.51) & 2.546 (0.66) \\
+                &               & Tweedie & 2.367 (0.59) & 3.068 (0.75) \\
+                & \multirow{2}{*}{Residual correction}
+                                & MSE     & 1.507 (0.35) & 2.046 (0.55) \\
+                &               & Tweedie & 1.449 (0.31) & 2.105 (0.50) \\
+            \bottomrule
+        \end{tabular}
+        \begin{tablenotes}
+            \small
+            \item[*] Applied to the first stage outcome models.
+        \end{tablenotes}
+    \end{threeparttable}
+\end{table}

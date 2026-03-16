@@ -1,0 +1,52 @@
+experiment:
+  n_runs: 50
+  test_size: 0.2
+  random_seed: 42
+  output_dir: "./results/simulation"
+
+  delta_grid: [1.0, 1.5, 2.0, 3.0, 5.0, 7.5, 10.0, 20.0, 50.0, 100.0, 200, 500, 1000]
+
+  # DGP scenarios to run. Each entry overrides zero_inflated and interference
+  # on top of the shared dgp block below.
+  dgp_scenarios:
+    dgp_a: {zero_inflated: false, interference: false, name: "DGP A"}
+    dgp_b: {zero_inflated: true,  interference: false, name: "DGP B"}
+
+  # Learner variants. stage1_shrinkage=true enables the HyX-learner blend.
+  learner_configs:
+    x_learner:   {stage1_shrinkage: false, name: "X-learner"}
+    hyx_learner: {stage1_shrinkage: true,  name: "HyX-learner"}
+
+  # RA formula + first-stage objective grid.
+  ra_obj_configs:
+    - {key: acharki_mse,     objective: gaussian, subtract_resid: true,  ra_label: "Acharki et al. (2023)", obj_label: "MSE"}
+    - {key: acharki_tweedie, objective: tweedie,  subtract_resid: true,  ra_label: "Acharki et al. (2023)", obj_label: "Tweedie"}
+    - {key: ours_mse,        objective: gaussian, subtract_resid: false, ra_label: "Residual correction",   obj_label: "MSE"}
+    - {key: ours_tweedie,    objective: tweedie,  subtract_resid: false, ra_label: "Residual correction",   obj_label: "Tweedie"}
+
+dgp:
+  n_clusters: 5
+  n_units_per_cluster: 50
+  n_time_periods: 50
+  n_treatments: 9
+  n_covariates: 19
+  zero_inflated: false   # overridden per DGP scenario at runtime
+  hidden_confounding_strength: 0.0
+  overlap_scale: 1.0
+  cluster_price_means: [20, 50, 10, 80, 150]
+  cluster_price_stds: [2, 5, 5, 10, 10]
+  interference: false    # both DGP A and B have no interference
+  interference_strength: 3
+  n_interference_peers: 5
+
+model:
+  xgboost_params:
+    n_estimators: 100
+    max_depth: 3
+    learning_rate: 0.05
+    min_child_weight: 10
+    subsample: 0.8
+    colsample_bytree: 0.8
+    n_jobs: 1
+  interference: false    # no interference features in main experiment
+  spatial_agg: "mean"
